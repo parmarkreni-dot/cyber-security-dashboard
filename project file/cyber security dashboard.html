@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cyber Security Dashboard Portal</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Segoe UI',sans-serif;
+}
+
+body{
+background:#050816;
+min-height:100vh;
+color:white;
+overflow:hidden;
+}
+
+body::before{
+content:"";
+position:fixed;
+width:100%;
+height:100%;
+background:
+repeating-linear-gradient(
+90deg,
+rgba(0,255,0,0.05) 0px,
+rgba(0,255,0,0.05) 1px,
+transparent 1px,
+transparent 50px
+);
+animation:matrix 5s linear infinite;
+z-index:-1;
+}
+
+@keyframes matrix{
+from{
+transform:translateY(-100%);
+}
+to{
+transform:translateY(100%);
+}
+}
+
+.login-container{
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+width:420px;
+padding:30px;
+background:rgba(255,255,255,0.08);
+backdrop-filter:blur(15px);
+border-radius:20px;
+box-shadow:0 0 25px #00ff99;
+}
+
+.login-container h1{
+text-align:center;
+margin-bottom:20px;
+color:#00ff99;
+}
+
+input{
+width:100%;
+padding:12px;
+margin-top:12px;
+border:none;
+border-radius:10px;
+font-size:15px;
+outline:none;
+}
+
+.password-box{
+position:relative;
+width:100%;
+}
+
+.password-box input{
+padding-right:50px;
+}
+
+.eye{
+position:absolute;
+right:15px;
+top:55%;
+transform:translateY(-50%);
+cursor:pointer;
+font-size:20px;
+color:black;
+z-index:100;
+}
+
+button{
+width:100%;
+padding:12px;
+margin-top:15px;
+border:none;
+border-radius:10px;
+background:#00ff99;
+font-weight:bold;
+cursor:pointer;
+transition:0.3s;
+}
+
+button:hover{
+transform:scale(1.03);
+}
+
+#error{
+margin-top:10px;
+text-align:center;
+color:#ff8080;
+}
+
+.secure-text{
+text-align:center;
+margin-top:10px;
+font-size:14px;
+color:#cbd5e1;
+}
+
+#dashboard{
+display:none;
+padding:30px;
+height:100vh;
+overflow:auto;
+}
+
+.welcome{
+text-align:center;
+margin-bottom:25px;
+color:#00ff99;
+}
+
+.dashboard-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:20px;
+}
+
+.card{
+background:rgba(255,255,255,0.1);
+padding:20px;
+border-radius:15px;
+text-align:center;
+backdrop-filter:blur(10px);
+box-shadow:0 0 15px rgba(0,255,153,0.3);
+transition:0.3s;
+}
+
+.card:hover{
+transform:translateY(-5px);
+}
+
+.card h2{
+color:#00ff99;
+margin-bottom:10px;
+font-size:18px;
+}
+
+.card p{
+font-size:24px;
+font-weight:bold;
+}
+
+.tips{
+margin-top:30px;
+background:rgba(255,255,255,0.1);
+padding:20px;
+border-radius:15px;
+}
+
+.tips h2{
+margin-bottom:15px;
+color:#00ff99;
+}
+
+.tips li{
+margin-bottom:10px;
+}
+
+.logout{
+background:red;
+color:white;
+max-width:200px;
+display:block;
+margin:25px auto;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="login-container" id="loginBox">
+
+<h1>🔐 Hacker Login Portal</h1>
+
+<input
+type="text"
+id="username"
+placeholder="Enter Username">
+
+<div class="password-box">
+
+<input
+type="password"
+id="password"
+placeholder="Enter Password">
+
+<span
+class="eye"
+onclick="togglePassword()">
+👁️
+</span>
+
+</div>
+
+<button onclick="login()">
+LOGIN
+</button>
+
+<p id="error"></p>
+
+<p class="secure-text">
+🛡 Secure Authentication System
+</p>
+
+</div>
+
+<div id="dashboard">
+
+<h1 class="welcome">
+Welcome, <span id="displayUser"></span> 👋
+</h1>
+
+<div class="dashboard-grid">
+
+<div class="card">
+<h2>🛡 Security Status</h2>
+<p>SECURE</p>
+</div>
+
+<div class="card">
+<h2>⚠ Threats Blocked</h2>
+<p>1245</p>
+</div>
+
+<div class="card">
+<h2>🌐 Network Status</h2>
+<p>ONLINE</p>
+</div>
+
+<div class="card">
+<h2>🔐 Password Status</h2>
+<p>STRONG</p>
+</div>
+
+<div class="card">
+<h2>📧 Phishing Attempts</h2>
+<p>12</p>
+</div>
+
+<div class="card">
+<h2>💻 Firewall</h2>
+<p>ACTIVE</p>
+</div>
+
+</div>
+
+<div class="tips">
+
+<h2>Cyber Security Tips</h2>
+
+<ul>
+<li>Use strong passwords with symbols and numbers.</li>
+<li>Enable Two-Factor Authentication (2FA).</li>
+<li>Never click suspicious email links.</li>
+<li>Keep software and antivirus updated.</li>
+<li>Use VPN on public Wi-Fi networks.</li>
+<li>Backup important data regularly.</li>
+<li>Avoid sharing sensitive information online.</li>
+<li>Monitor accounts for suspicious activity.</li>
+</ul>
+
+</div>
+
+<button
+class="logout"
+onclick="logout()">
+Logout
+</button>
+
+</div>
+
+<script>
+
+function togglePassword(){
+
+let pass =
+document.getElementById("password");
+
+if(pass.type==="password"){
+pass.type="text";
+}
+else{
+pass.type="password";
+}
+
+}
+
+function login(){
+
+let username =
+document.getElementById("username").value.trim();
+
+let password =
+document.getElementById("password").value;
+
+let error =
+document.getElementById("error");
+
+if(username===""){
+error.innerHTML=
+"Please enter username";
+return;
+}
+
+if(password.length<8){
+error.innerHTML=
+"Password must be at least 8 characters";
+return;
+}
+
+if(!password.includes("@")){
+error.innerHTML=
+"Password must contain @ symbol";
+return;
+}
+
+error.innerHTML="";
+
+document.getElementById(
+"displayUser").innerHTML =
+username;
+
+document.getElementById(
+"loginBox").style.display =
+"none";
+
+document.getElementById(
+"dashboard").style.display =
+"block";
+
+}
+
+function logout(){
+
+document.getElementById(
+"dashboard").style.display =
+"none";
+
+document.getElementById(
+"loginBox").style.display =
+"block";
+
+document.getElementById(
+"username").value="";
+
+document.getElementById(
+"password").value="";
+
+}
+
+</script>
+
+</body>
+</html>
